@@ -191,6 +191,7 @@ namespace GarageProject.Garages
                          .Where(x => x is Vehicle)
                          select vehicle;
 
+            // If user has chosen to sort by vehicle, read input and sort
             if (vehicleSort)
             {
                 Console.WriteLine("Vehicle to search for: ");
@@ -233,6 +234,7 @@ namespace GarageProject.Garages
                 }
             }
 
+            // If user has chosen to sort by colour, read input and sort
             if (colourSort)
             {
                 Console.WriteLine("Colour to search for: ");
@@ -247,6 +249,7 @@ namespace GarageProject.Garages
                 }
             }
 
+            // If user has chosen to sort by wheels, read input and sort
             if (wheelSort)
             {
                 Console.WriteLine("Number of wheels: ");
@@ -261,6 +264,7 @@ namespace GarageProject.Garages
                 }
             }
 
+            // If user has chosen to sort by passengers, read input and sort
             if (passSort)
             {
                 Console.WriteLine("Number of wheels: ");
@@ -277,6 +281,7 @@ namespace GarageProject.Garages
 
             Console.Clear();
 
+            // Based on chosen sorts, loop through result and print
             foreach (var v in result)
             {
                 Console.WriteLine($"Vehicle: \n{v.RegNr}\n{v.Colour}\n");
