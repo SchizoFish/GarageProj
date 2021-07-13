@@ -12,7 +12,7 @@ namespace GarageProject.Garages
     {
         // Properties and fields
         public IGarage Garage { get; set; }
-        
+
         // Sets the garage capacity based on user input (parameter)
         public void CreateGarage(int capacity)
         {
@@ -35,8 +35,10 @@ namespace GarageProject.Garages
         }
 
         // Writes out all of the vehicles in the garage
-        public void ListVehicles()
+        public List<string> ListVehicles()
         {
+            List<string> vehiclesToList = new List<string>();
+
             try
             {
                 // If the garage is not epmty
@@ -46,7 +48,8 @@ namespace GarageProject.Garages
                     {
                         if (Garage.Vehicles[i] != null)
                         {
-                            Console.WriteLine($"Reg Nr: {Garage.Vehicles[i].RegNr}\nColour: {Garage.Vehicles[i].Colour}\n\n");
+                            string vehicleInfo = $"Reg Nr: {Garage.Vehicles[i].RegNr}\nColour: {Garage.Vehicles[i].Colour}\n\n";
+                            vehiclesToList.Add(vehicleInfo);
                         }
                     }
                 }
@@ -55,6 +58,8 @@ namespace GarageProject.Garages
             {
                 Console.WriteLine($"ERROR: {e.Message}");
             }
+
+            return vehiclesToList;
         }
 
         // Counts all the types of vehicles in the garage, and then lists ammount
@@ -69,9 +74,26 @@ namespace GarageProject.Garages
             Console.WriteLine($"Cars: {carNum}\nBoats: {boatNum}\nBuses: {busNum}\nAirplanes: {planeNum}\nMtorocycles: {mcNum}");
 
         }
+        
+        // Checks that the added reg nr is unique
+        public bool CheckRegNrIsNew(string regNr)
+        {
+            for (int i = 0; i < Garage.Vehicles.Length - 1; i++)
+            {
+                if (Garage.Vehicles[i] != null)
+                {
+                    if (Garage.Vehicles[i].RegNr == regNr)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
 
         // Takes in a vehicle sent by the user, and adds it to the garage
-        public void AddVehicle(IVehicle vehicleToAdd)
+        public void AddVehicle(IVehicle vehicle)
         {
             try
             {
@@ -79,7 +101,7 @@ namespace GarageProject.Garages
                 {
                     if (Garage.Vehicles[i] == null)
                     {
-                        Garage.Vehicles[i] = vehicleToAdd;
+                        Garage.Vehicles[i] = vehicle;
                         Console.Clear();
                         Console.WriteLine("Vehicle successfully added!");
                         break;
@@ -93,7 +115,7 @@ namespace GarageProject.Garages
         }
 
         // Removes a vehicle from the garage based on input reg. nr
-        public void RemoveVehicle(string regToRemove)
+        public string RemoveVehicle(string regToRemove)
         {
             try
             {
@@ -104,12 +126,11 @@ namespace GarageProject.Garages
 
 
                 Console.Clear();
-                Console.WriteLine("Vehicle successfully removed!");
+                return "Vehicle successfully removed!";
             }
             catch (Exception e)
             {
-                Console.WriteLine($"ERROR: {e.Message}");
-                throw;
+                return $"ERROR: {e.Message}";
             }
         }
 

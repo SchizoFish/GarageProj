@@ -14,10 +14,11 @@ namespace GarageProject.Garages
 
         public void CreateGarage(int capacity);
         public bool IsGarageFull();
-        void ListVehicles();
+        List<string> ListVehicles();
         void ListVTypes();
-        void AddVehicle(IVehicle vehicleToAdd);
-        void RemoveVehicle(string regToRemove);
+        void AddVehicle(IVehicle vehicle);
+        bool CheckRegNrIsNew(string regNr);
+        string RemoveVehicle(string regToRemove);
         string FindReg(string regNr);
         int PickVehicle();
         void SortByValue(bool vehicleSort, bool colourSort, bool wheelSort, bool passSort);

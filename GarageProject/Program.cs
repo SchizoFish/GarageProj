@@ -7,9 +7,9 @@ namespace GarageProject.UI
     {
         static void Main(string[] args)
         {
-            // Instansiates a User Interface and runs the program
-            IUI newUI = new ConsoleUI();
-            newUI.Menu();
+            // Instansiates the Manager and runs the program
+            Manager manager = new Manager();
+            manager.RunProgram();
 
             Console.WriteLine("Thank you!");
             Console.ReadKey();

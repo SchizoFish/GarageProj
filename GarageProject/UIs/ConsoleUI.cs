@@ -8,18 +8,17 @@ using System.Threading.Tasks;
 
 namespace GarageProject.UIs
 {
-    class ConsoleUI : IUI
+    public class ConsoleUI : IUI
     {
         // Necessary
-        public static IGarageHandler handler = new GarageHandler();
-        public static bool show = true;
+        public static Manager manager = new Manager();
+        //public static bool show = true;
         public static bool contSort = true;
         public static bool hasGarage = false;
 
         // Starts the menu and asks the user for input
         public void Menu()
         {
-            while (show)
             {
                 Console.WriteLine();
                 Console.WriteLine("Main menu\n");
@@ -45,7 +44,7 @@ namespace GarageProject.UIs
             switch (input.Key)
             {
                 case ConsoleKey.NumPad0:
-                    show = false;
+                    //show = false;
                     Console.Clear();
                     break;
                 case ConsoleKey.NumPad1:
@@ -62,11 +61,11 @@ namespace GarageProject.UIs
                     break;
                 case ConsoleKey.NumPad4:
                     Console.Clear();
-                    handler.ListVehicles();
+                    manager.ListVehicles();
                     break;
                 case ConsoleKey.NumPad5:
                     Console.Clear();
-                    handler.ListVTypes();
+                    manager.handler.ListVTypes();
                     break;
                 case ConsoleKey.NumPad6:
                     Console.Clear();
@@ -84,16 +83,16 @@ namespace GarageProject.UIs
 
         }
 
-        // Checks that garage does not already excist- and, if not, creates garage
+        // Checks that garage does not already exist- and, if not, creates garage
         public void CreateGarage()
         {
             if (!hasGarage)
             {
-                Console.WriteLine("Add garage capacity: ");
                 try
                 {
+                    Console.WriteLine("Add garage capacity: ");
                     int capacity = int.Parse(Console.ReadLine());
-                    handler.CreateGarage(capacity);
+                    manager.handler.CreateGarage(capacity);
                     hasGarage = true;
                     Console.WriteLine("Garage created succesfully");
                 }
@@ -111,30 +110,33 @@ namespace GarageProject.UIs
         // Checks if there's space in the garage, and then asks user for input on what vehicles to add
         public void AddVehicle()
         {
-            if (handler.Garage.Vehicles.Length != 0)
+            if (hasGarage)
             {
-                if (!handler.IsGarageFull())
+                if (!manager.handler.IsGarageFull())
                 {
-                    Console.WriteLine("How many vehicles would you like to park? ");
                     try
                     {
-                        IVehicle vehicle = null;
+                        Console.WriteLine("How many vehicles would you like to park? ");
                         int numToAdd = int.Parse(Console.ReadLine());
                         if (numToAdd > 0)
                         {
                             for (int i = 0; i < numToAdd; i++)
                             {
-                                int pickedVehicle = handler.PickVehicle();
+                                int pickedVehicle = manager.handler.PickVehicle();
                                 Console.WriteLine("What is the vehicles reg. number? ");
                                 string regnr = Console.ReadLine().ToUpper();
+                                bool newReg = manager.handler.CheckRegNrIsNew(regnr);
 
-                                if (regnr.Length != 6)
+                                // Checks that the reg nr is both correct and unique
+                                if (regnr.Length != 6 || !newReg)
                                 {
                                     do
                                     {
-                                        Console.WriteLine("Reg. number must be 6 characters. Please add the correct reg. number: ");
+                                        Console.WriteLine("Reg. number must be 6 characters and unique. Please add the correct reg. number: ");
                                         regnr = Console.ReadLine().ToUpper();
-                                    } while (regnr.Length != 6);
+                                        newReg = manager.handler.CheckRegNrIsNew(regnr);
+
+                                    } while (regnr.Length != 6 || !newReg);
                                 }
 
                                 Console.WriteLine("What is the vehicles colour? ");
@@ -144,21 +146,21 @@ namespace GarageProject.UIs
                                 Console.WriteLine("How many passengers does the vehicle hold? ");
                                 double passengers = double.Parse(Console.ReadLine());
 
+                                IVehicle vehicle = null;
                                 if (pickedVehicle == 1)
+
                                 {
                                     Console.WriteLine("What brand is the vehicle?");
                                     string brand = Console.ReadLine().ToUpper();
                                     Console.WriteLine("What is the vehicles max speed?");
                                     double maxSpeed = double.Parse(Console.ReadLine());
                                     vehicle = new Car(regnr, colour, wheels, passengers, brand, maxSpeed);
-                                    handler.AddVehicle(vehicle);
                                 }
                                 else if (pickedVehicle == 2)
                                 {
                                     Console.WriteLine("What is the vehicles max speed?");
                                     double maxSpeed = double.Parse(Console.ReadLine());
                                     vehicle = new Boat(regnr, colour, wheels, passengers, maxSpeed);
-                                    handler.AddVehicle(vehicle);
                                 }
                                 else if (pickedVehicle == 3)
                                 {
@@ -170,14 +172,12 @@ namespace GarageProject.UIs
                                         doubleDecker = true;
                                     }
                                     vehicle = new Bus(regnr, colour, wheels, passengers, doubleDecker);
-                                    handler.AddVehicle(vehicle);
                                 }
                                 else if (pickedVehicle == 4)
                                 {
                                     Console.WriteLine("How many motors on the airplane?");
                                     int motors = int.Parse(Console.ReadLine());
                                     vehicle = new Airplane(regnr, colour, wheels, passengers, motors);
-                                    handler.AddVehicle(vehicle);
                                 }
                                 else if (pickedVehicle == 5)
                                 {
@@ -193,8 +193,9 @@ namespace GarageProject.UIs
                                         sideCar = true;
                                     }
                                     vehicle = new Motorcycle(regnr, colour, wheels, passengers, brand, maxSpeed, sideCar);
-                                    handler.AddVehicle(vehicle);
                                 }
+
+                                manager.handler.AddVehicle(vehicle);
                             }
                         }
                         else
@@ -229,7 +230,9 @@ namespace GarageProject.UIs
                 Console.WriteLine("Please add the registration number of the vehicle you would like to remove: ");
                 string input = Console.ReadLine();
 
-                handler.RemoveVehicle(input.ToUpper());
+                string result = manager.handler.RemoveVehicle(input.ToUpper());
+
+                Console.WriteLine($"{result}");
             }
             catch (Exception e)
             {
@@ -245,7 +248,7 @@ namespace GarageProject.UIs
                 Console.WriteLine("What is the reg. number of the vehicle? ");
                 string input = Console.ReadLine();
                 Console.Clear();
-                string result = handler.FindReg(input.ToUpper());
+                string result = manager.handler.FindReg(input.ToUpper());
                 Console.WriteLine($"{result}");
             }
             catch (Exception e)
@@ -307,7 +310,7 @@ namespace GarageProject.UIs
 
                 } while (addValue);
 
-                handler.SortByValue(vehicSort, colSort, wheelSort, passSort);
+                manager.handler.SortByValue(vehicSort, colSort, wheelSort, passSort);
             }
             catch (Exception e)
             {
