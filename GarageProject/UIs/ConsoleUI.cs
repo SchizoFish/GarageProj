@@ -65,7 +65,7 @@ namespace GarageProject.UIs
                     break;
                 case ConsoleKey.NumPad5:
                     Console.Clear();
-                    manager.handler.ListVTypes();
+                    manager.ListVTypes();
                     break;
                 case ConsoleKey.NumPad6:
                     Console.Clear();

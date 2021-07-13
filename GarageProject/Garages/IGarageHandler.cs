@@ -15,7 +15,7 @@ namespace GarageProject.Garages
         public void CreateGarage(int capacity);
         public bool IsGarageFull();
         List<string> ListVehicles();
-        void ListVTypes();
+        string ListVTypes();
         void AddVehicle(IVehicle vehicle);
         bool CheckRegNrIsNew(string regNr);
         string RemoveVehicle(string regToRemove);

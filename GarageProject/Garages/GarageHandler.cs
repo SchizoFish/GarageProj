@@ -63,7 +63,7 @@ namespace GarageProject.Garages
         }
 
         // Counts all the types of vehicles in the garage, and then lists ammount
-        public void ListVTypes()
+        public string ListVTypes()
         {
             var carNum = Garage.Vehicles.Where(x => x is Car).Count();
             var boatNum = Garage.Vehicles.Where(x => x is Boat).Count();
@@ -71,7 +71,7 @@ namespace GarageProject.Garages
             var busNum = Garage.Vehicles.Where(x => x is Bus).Count();
             var mcNum = Garage.Vehicles.Where(x => x is Motorcycle).Count();
 
-            Console.WriteLine($"Cars: {carNum}\nBoats: {boatNum}\nBuses: {busNum}\nAirplanes: {planeNum}\nMtorocycles: {mcNum}");
+            return $"Cars: {carNum}\nBoats: {boatNum}\nBuses: {busNum}\nAirplanes: {planeNum}\nMtorocycles: {mcNum}";
 
         }
         

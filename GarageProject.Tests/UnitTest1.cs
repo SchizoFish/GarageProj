@@ -3,6 +3,8 @@ using GarageProject.Garages;
 using GarageProject.Entities.Vehicles;
 using Moq;
 using GarageProject.UIs;
+using System.Collections.Generic;
+using System;
 
 namespace GarageProject.Tests
 {
@@ -133,6 +135,49 @@ namespace GarageProject.Tests
 
             Assert.AreEqual(expected, result);
 
+        }
+
+        [TestMethod]
+        public void ReturnsVehicleList()
+        {
+            testHandler.CreateGarage(4);
+
+            IVehicle vehicle1 = new Car("HJK234", "Red", 4, 5, "Ford", 110);
+            IVehicle vehicle2 = new Car("YUI123", "Blue", 4, 5, "Volvo", 110);
+            IVehicle vehicle3 = new Car("KLO567", "red", 4, 5, "Toyota", 110);
+            IVehicle vehicle4 = vehicle1;
+
+            testHandler.AddVehicle(vehicle1);
+            testHandler.AddVehicle(vehicle2);
+            testHandler.AddVehicle(vehicle3);
+
+            List<string> listResult = testHandler.ListVehicles();
+
+            string concat = String.Join("", listResult.ToArray());
+
+            string expected = $"Reg Nr: {vehicle1.RegNr}\nColour: {vehicle1.Colour}\n\nReg Nr: {vehicle2.RegNr}\nColour: {vehicle2.Colour}\n\nReg Nr: {vehicle3.RegNr}\nColour: {vehicle3.Colour}\n\n";
+            string result = concat;
+
+            Assert.AreEqual(expected, result);
+        }
+
+        public void FindsVehicleNum()
+        {
+            testHandler.CreateGarage(4);
+
+            IVehicle vehicle1 = new Car("HJK234", "Red", 4, 5, "Ford", 110);
+            IVehicle vehicle2 = new Car("YUI123", "Blue", 4, 5, "Volvo", 110);
+            IVehicle vehicle3 = new Car("KLO567", "red", 4, 5, "Toyota", 110);
+            IVehicle vehicle4 = vehicle1;
+
+            testHandler.AddVehicle(vehicle1);
+            testHandler.AddVehicle(vehicle2);
+            testHandler.AddVehicle(vehicle3);
+
+            string expected = $"Cars: 3\nBoats: 0\nBuses: 0\nAirplanes: 0\nMtorocycles: 0";
+            string result = testHandler.ListVTypes();
+
+            Assert.AreEqual(expected, result);
         }
 
         [TestCleanup]

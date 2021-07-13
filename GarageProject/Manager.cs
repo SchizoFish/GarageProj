@@ -32,5 +32,12 @@ namespace GarageProject
                 Console.WriteLine(vehicleInfo);
             }
         }
+
+        public void ListVTypes()
+        {
+            string result = handler.ListVTypes();
+
+            Console.WriteLine(result);
+        }
     }
 }
